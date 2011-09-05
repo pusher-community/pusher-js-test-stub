@@ -3,11 +3,41 @@
 <html>
 <head>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <style type="text/css">
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #363C4F;
+    }
+  
+    #my_application {
+      clear: both;
+      overflow: auto;
+    }
+  
+    #chat_entry, #chat_messages {
+      float: left;
+      width: 200px;
+      margin-bottom: 2em;
+      margin-right: 2em;
+      background-color: #F8F8F8;
+      border: 1px #CCC solid;
+      padding: 1em;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+    }
+    
+    #chat_message {
+      clear: right;
+      height: 300px;
+      overflow: auto;
+    }
+  </style>
 </head>
 <body>
   <div id="my_application">
     <!-- This area represents the application that is being tested -->
-    <h1>My Application</h1>
+    <h1>My Chat Application</h1>
     
     <div id="connection_status">
       <span>Status: </span><span class="status"></span>
@@ -27,20 +57,25 @@
   <script>
     $(function() {
       
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) window.console.log(message);
+      };
+      
       var pusher = new Pusher('006c79b1fe1700c6c10d');
       pusher.connection.bind('state_change', function() {
         $("#connection_status .status").text(pusher.connection.state);
         $("#chat_entry .your_id").text(pusher.connection.socket_id);
       });
       
-      var chatChannel = pusher.subscribe('presence-chat-channel', function(update) {
-        var html = createMsgHTML(update);
+      var chatChannel = pusher.subscribe('presence-chat-channel');
+      chatChannel.bind('chat-message-received', function(message) {
+        var html = createMsgHTML(message);
         $("#chat_messages").prepend(html);
       });
     });
     
-    function createMsgHTML(update) {
-      return "<div><span>" + update.from + "</span> says &quot;<span>" + update.text + "</span></div>";
+    function createMsgHTML(message) {
+      return "<div><span class='from'>" + message.from + "</span> says &quot;<span class='text'>" + message.text + "</span></div>";
     };
   </script>
   
@@ -86,14 +121,20 @@
       module("Chat Updates");
 
       test("Chat updates are displayed in the UI", function() {
-        ok( true, "all pass" );
+        var message = {from: '1234.1234', text: 'hello!'};
+        var expected = createMsgHTML(message);
+        
+        var stub = Pusher.instances[0];
+        stub.channel('presence-chat-channel').dispatch('chat-message-received', message);
+        
+        var uiFrom = $("#chat_messages .from").text();
+        var uiText = $("#chat_messages .text").text();
+        
+        equal( uiFrom, message.from, "We expect the from to be '" + message.from + "'" );
+        equal( uiText, message.text, "We expect the text to be '" + message.text + "'" );        
       });
 
-      test("second test within module", function() {
-        ok( true, "all pass" );
-      });
-
-      module("Module B");
+      module("Failures");
 
       test("some other test", function() {
         expect(2);
