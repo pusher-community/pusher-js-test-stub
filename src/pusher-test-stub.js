@@ -26,6 +26,9 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    * @type Array
    */
   Pusher.instances = [];
+  
+  /** required for the Flash fallback */
+  Pusher.ready = function() {}
 
   /**
    * Accesses the first Pusher Stub instance and dispatches an event on a channel.

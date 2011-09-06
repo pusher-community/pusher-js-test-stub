@@ -1,0 +1,28 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #363C4F;
+}
+
+#my_application {
+  clear: both;
+  overflow: auto;
+}
+
+#chat_entry, #chat_messages {
+  float: left;
+  width: 200px;
+  margin-bottom: 2em;
+  margin-right: 2em;
+  background-color: #F8F8F8;
+  border: 1px #CCC solid;
+  padding: 1em;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+#chat_message {
+  clear: right;
+  height: 300px;
+  overflow: auto;
+}

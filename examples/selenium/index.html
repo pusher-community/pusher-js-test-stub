@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="../common/styles.css" />
+</head>
+<body>
+  <div id="my_application">
+    <!-- This area represents the application that is being tested -->
+    <h1>My Chat Application</h1>
+    
+    <div id="connection_status">
+      <span>Status: </span><span class="status"></span>
+    </div>
+    
+    <div id="chat_entry">
+      <span>Your ID: </span><span class="your_id"></span><br />
+      <textarea id="message"></textarea>
+      <button id="send_chat_btn">Send</button>
+    </div>
+    
+    <div id="chat_messages">
+    </div>
+  </div>
+  
+  <script src="http://js.pusherapp.com/1.9/pusher.min.js"></script>
+  <script>
+    $(function() {
+      
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) window.console.log(message);
+      };
+      
+      var pusher = new Pusher('006c79b1fe1700c6c10d');
+      pusher.connection.bind('state_change', function() {
+        $("#connection_status .status").text(pusher.connection.state);
+        $("#chat_entry .your_id").text(pusher.connection.socket_id);
+      });
+      
+      var chatChannel = pusher.subscribe('presence-chat-channel');
+      chatChannel.bind('chat-message-received', function(message) {
+        var html = createMsgHTML(message);
+        $("#chat_messages").prepend(html);
+      });
+    });
+    
+    function createMsgHTML(message) {
+      return "<div><span class='from'>" + message.from + "</span> says &quot;<span class='text'>" + message.text + "</span>&quot;</div>";
+    };
+  </script>
+  
+  <script>window.ALLOW_PUSHER_OVERRIDE = true;</script>
+  <script src="../../build/bin/pusher-test-stub.js"></script>
+
+</body>
+</html>
