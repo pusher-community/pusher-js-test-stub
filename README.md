@@ -1,0 +1,1 @@
+Please see the [Pusher Test Stub blog post](http://blog.pusher.com/2011/9/2/integration-testing-the-pusher-javascript-library) for more information.
