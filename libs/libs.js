@@ -167,6 +167,14 @@ Example:
     }
   };
 
+  // Ensures any currently executing function has time to complete before the event is triggered.
+  EventsDispatcher.prototype.timeoutDispatch = function(event_name, event_data) {
+    var self = this;
+    setTimeout( function() {
+      self.dispatch( event_name, event_data );
+    }, 0);
+  };
+
   EventsDispatcher.prototype.dispatch_global_callbacks = function(event_name, data) {
     for (var i = 0; i < this.global_callbacks.length; i++) {
       this.global_callbacks[i](event_name, data);

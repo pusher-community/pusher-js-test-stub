@@ -57,7 +57,8 @@
       // we must state we are happy to override the Pusher object
       window.ALLOW_PUSHER_OVERRIDE = true;
     </script>
-    <script src="../../build/bin/pusher-test-stub.js"></script>
+    <script src="../../libs/libs.js"></script>
+    <script src="../../src/pusher-test-stub.js"></script>
     
     <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
     <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
@@ -103,6 +104,18 @@
         
         equal( uiFrom, message.from, "We expect the from to be '" + message.from + "'" );
         equal( uiText, message.text, "We expect the text to be '" + message.text + "'" );        
+      });
+
+      module( "Presence" );
+
+      test( "Can subscribe to a presence channel", function() {
+        expect(2);
+
+        var pusher = Pusher.instances[0];
+        var channel = pusher.subscribe( 'presence-channel' );
+
+        ok(channel.members, 'should have a `members` property');
+        ok(channel.members.me, 'members should have a `me` property');
       });
 
       module("Failures");

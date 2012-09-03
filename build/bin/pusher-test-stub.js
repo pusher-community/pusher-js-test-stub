@@ -167,6 +167,14 @@ Example:
     }
   };
 
+  // Ensures any currently executing function has time to complete before the event is triggered.
+  EventsDispatcher.prototype.timeoutDispatch = function(event_name, event_data) {
+    var self = this;
+    setTimeout( function() {
+      self.dispatch( event_name, event_data );
+    }, 0);
+  };
+
   EventsDispatcher.prototype.dispatch_global_callbacks = function(event_name, data) {
     for (var i = 0; i < this.global_callbacks.length; i++) {
       this.global_callbacks[i](event_name, data);
@@ -185,7 +193,7 @@ if(window["Pusher"]){ // backwards compatibility
   Pusher.EventsDispatcher = com.pusher.EventsDispatcher;
 }
 
-com.pusher.define("com.pusher.test.framework", function(exports) {
+com.pusher.define("pusherjs.test.framework", function(exports) {
   
   /**
    * Stub Pusher object.
@@ -194,6 +202,8 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
     Pusher.instances.push(this);
     
     this.connection = new Connection();
+    
+    this.test = new com.pusher.EventsDispatcher();
   
     this._channels = {};
   };
@@ -202,7 +212,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    * Gets the channel with the given channel name.
    * @param {String} The name identifying the channel to be retrieved.
    *
-   * @return {com.pusher.test.framework.Channel} a stub channel object.
+   * @return {pusherjs.test.framework.Channel} a stub channel object.
    */ 
   Pusher.prototype.channel = function(channelName) {
     return this._channels[channelName];
@@ -215,7 +225,36 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
   Pusher.instances = [];
   
   /** required for the Flash fallback */
-  Pusher.ready = function() {}
+  Pusher.ready = function() {};
+  
+  /**
+   * @private 
+   * Used internally by numerous Pusher components
+   */
+  Pusher.debug = function() {
+    if (!Pusher.log) { return }
+    var m = ["Pusher"]
+    for (var i = 0; i < arguments.length; i++){
+      if (typeof arguments[i] === "string") {
+        m.push(arguments[i])
+      } else {
+        if (window['JSON'] == undefined) {
+          m.push(arguments[i].toString());
+        } else {
+          m.push(JSON.stringify(arguments[i]))
+        }
+      }
+    };
+    Pusher.log(m.join(" : "))
+  };
+  
+  // Used in event dispatacher
+  
+  /** @private */
+  Pusher.Connection = function(){};
+  
+  /** @private */
+  Pusher.Machine = function(){};
 
   /**
    * Accesses the first Pusher Stub instance and dispatches an event on a channel.
@@ -232,11 +271,12 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
 
   /**
    * Subscribe to a channel.
-   * @return {com.pusher.test.framework.Channel} A stub channel object.
+   * @return {pusherjs.test.framework.Channel} A stub channel object.
    */
   Pusher.prototype.subscribe = function(channelName) {
-    var channel = new Channel(channelName);
+    var channel = Pusher._createChannel( channelName );
     this._channels[channelName] = channel;
+    
     return channel;
   };
 
@@ -248,6 +288,19 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
   }
 
   /**
+   * @private
+   * Factory for creating channels.
+   */
+  Pusher._createChannel = function( channelName ) {
+    if( channelName.indexOf( 'presence-' ) === 0 ) {
+      return new PresenceChannel( channelName );
+    }
+    else {
+      return new Channel( channelName );
+    }
+  };
+
+  /**
    * A stub channel object.
    * @extends EventsDispatcher
    */
@@ -255,9 +308,45 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
     com.pusher.EventsDispatcher.call(this);
   
     this.name = name;
+
+    this._$onSubscriptionSucceeded();
   };
   com.pusher.extend(Channel, com.pusher.EventsDispatcher);
+
+  /**
+   * Called to trigger the `pusher:subscription_succeeded` event.
+   * @protected
+   */
+  Channel.prototype._$onSubscriptionSucceeded = function() {
+    this.timeoutDispatch( "pusher:subscription_succeeded", undefined );
+  };
   
+  /**
+   * Stub Presence channel.
+   */
+  var PresenceChannel = function(name) {
+    Channel.call( this, name );
+
+    /**
+     * The members in the presence channel.
+     * @type Members
+     */
+    this.members = new Members();
+  };
+  com.pusher.extend(PresenceChannel, Channel);
+
+  /**
+   * Called to trigger the `pusher:subscription_succeeded` event.
+   * @protected
+   */
+  PresenceChannel.prototype._$onSubscriptionSucceeded = function() {
+
+    this.timeoutDispatch( "pusher:subscription_succeeded", this.members );
+  };
+
+  /**
+   * Stub connection object.
+   */
   var Connection = function() {
     com.pusher.EventsDispatcher.call(this);
     
@@ -279,6 +368,11 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
      * @type Number
      */
     this.count = 0;
+
+    /**
+     * The member representation of the current user.
+     */
+    this.me = {};
   };
 
   /**
@@ -318,4 +412,4 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
 if(typeof Pusher !== "undefined" && window.ALLOW_PUSHER_OVERRIDE !== true) {
   throw "Attempt to override Pusher object but it already exists. To allow Pusher object override set ALLOW_PUSHER_OVERRIDE to 'true'";
 }
-Pusher = com.pusher.test.framework.Pusher;
+Pusher = pusherjs.test.framework.Pusher;
