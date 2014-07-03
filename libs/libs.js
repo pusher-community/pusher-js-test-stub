@@ -25,7 +25,7 @@ com.pusher.namespace = function(namespace) {
     var name = parts[i];
     if(!context[name]) {
       context[name] = {};
-      context[name].__namespace = name;      
+      context[name].__namespace = name;
     }
     nsPath += name + ".";
     context = context[name];
@@ -46,14 +46,14 @@ com.pusher.namespace = function(namespace) {
  * var MyClass = function() {
  *    // do stuff
  *  };
- * 
+ *
  *  var myOtherClass = function() {
  *  };
- * 
+ *
  *  exports.MyClass = MyClass;
  *  exports.Dave = myOtherClass;
  * };
- * 
+ *
  * var myClassInstance = new com.pusher.util.MyClass();
  * var daveInstance = new com.pusher.util.Dave();
  *
@@ -138,6 +138,13 @@ Example:
   EventsDispatcher.prototype.bind = function(event_name, callback) {
     this.callbacks[event_name] = this.callbacks[event_name] || [];
     this.callbacks[event_name].push(callback);
+    return this;// chainable
+  };
+
+  EventsDispatcher.prototype.unbind = function(event_name, callback) {
+    callbackIndex = this.callbacks[event_name] && this.callbacks[event_name].indexOf(callback);
+    if (callbackIndex)
+      this.callbacks[event_name].splice(callbackIndex, 1);
     return this;// chainable
   };
 
