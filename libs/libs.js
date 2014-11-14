@@ -143,7 +143,7 @@ Example:
 
   EventsDispatcher.prototype.unbind = function(event_name, callback) {
     callbackIndex = this.callbacks[event_name] && this.callbacks[event_name].indexOf(callback);
-    if ((callbackIndex != undefined) && (callBackIndex > -1))
+    if ((callbackIndex != undefined) && (callbackIndex > -1))
       this.callbacks[event_name].splice(callbackIndex, 1);
     return this;// chainable
   };
