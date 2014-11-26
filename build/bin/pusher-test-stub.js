@@ -262,6 +262,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
     com.pusher.EventsDispatcher.call(this);
 
     this.name = name;
+    this.subscribed  = true;
   };
   com.pusher.extend(Channel, com.pusher.EventsDispatcher);
 

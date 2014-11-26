@@ -1,13 +1,13 @@
 com.pusher.define("com.pusher.test.framework", function(exports) {
-  
+
   /**
    * Stub Pusher object.
    */
   var Pusher = function(appKey, options) {
     Pusher.instances.push(this);
-    
+
     this.connection = new Connection();
-  
+
     this._channels = {};
   };
 
@@ -16,7 +16,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    * @param {String} The name identifying the channel to be retrieved.
    *
    * @return {com.pusher.test.framework.Channel} a stub channel object.
-   */ 
+   */
   Pusher.prototype.channel = function(channelName) {
     return this._channels[channelName];
   };
@@ -26,7 +26,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    * @type Array
    */
   Pusher.instances = [];
-  
+
   /** required for the Flash fallback */
   Pusher.ready = function() {}
 
@@ -66,14 +66,15 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    */
   var Channel = function(name) {
     com.pusher.EventsDispatcher.call(this);
-  
+
     this.name = name;
+    this.subscribed = true;
   };
   com.pusher.extend(Channel, com.pusher.EventsDispatcher);
-  
+
   var Connection = function() {
     com.pusher.EventsDispatcher.call(this);
-    
+
     this.state = undefined;
   };
   com.pusher.extend(Connection, com.pusher.EventsDispatcher);
@@ -85,7 +86,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
    */
   var Members = function() {
     this._members = {};
-  
+
     /**
      * The number of members in the collection.
      *
@@ -123,7 +124,7 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
       callback(this._members[id]);
     }
   };
-  
+
   exports.Pusher = Pusher;
   exports.Members = Members;
 });
