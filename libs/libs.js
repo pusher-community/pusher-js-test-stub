@@ -135,9 +135,11 @@ Example:
     this.global_callbacks = [];
   }
 
-  EventsDispatcher.prototype.bind = function(event_name, callback) {
+  EventsDispatcher.prototype.bind = function(event_name, callback, data) {
     this.callbacks[event_name] = this.callbacks[event_name] || [];
-    this.callbacks[event_name].push(callback);
+    this.callbacks[event_name].push(function() {
+      callback.apply(data, arguments);
+    });
     return this;// chainable
   };
 
