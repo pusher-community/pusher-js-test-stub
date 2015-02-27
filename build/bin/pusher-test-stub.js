@@ -318,6 +318,14 @@ com.pusher.define("com.pusher.test.framework", function(exports) {
     }
   };
 
+  /**
+   * Getter method to access team member
+   * @param {Integer} Id of the member
+   */
+  Members.prototype.get = function(id) {
+    return this._members[id];
+  };
+
   exports.Pusher = Pusher;
   exports.Members = Members;
 });
