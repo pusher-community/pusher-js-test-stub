@@ -1,0 +1,35 @@
+{
+  "name": "pusher-test-stub",
+  "version": "0.0.2",
+  "description": "The Pusher Test Stub provide a way of testing your client-side integration with the Pusher JavaScript library and lets you trigger events to ensure that your application behaves in the way you expect it to.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leggetter/pusher-test-stub.git"
+  },
+  "keywords": [
+    "pusher",
+    "test",
+    "stub"
+  ],
+  "author": "\"phil@leggetter.co.uk <phil@leggetter.co.uk> (http://www.leggetter.co.uk)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leggetter/pusher-test-stub/issues"
+  },
+  "homepage": "https://github.com/leggetter/pusher-test-stub",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "gulp": "^3.8.10",
+    "gulp-server-livereload": "^1.2.1",
+    "gulp-webpack": "^1.3.1",
+    "mocha": "^2.2.1"
+  },
+  "dependencies": {}
+}
