@@ -5,13 +5,64 @@ testing purposes.
 
 **This version is a work in progress. Please [report any problems](https://github.com/leggetter/pusher-test-stub/issues).**
 
+## Quick Start
+
+Install Pusher and the test stub.
+
+```
+$ bower install pusher
+$ bower install pusher-test-stub#2.0.0
+```
+
+When in test mode inject the test stub and execute tests.
+
+```html
+<html>
+<body>
+  <script src="./bower_components/pusher/dist/pusher.min.js"></script>
+  <!-- ONLY include in test mode -->
+  <script src="./bower_components/pusher-test-stub/dist/pusher-test-stub.js"></script>
+  <script>
+    var MyApp = {
+      messages: [],
+      init: function() {
+        var pusher = new Pusher('key');
+        var channel = pusher.subscribe('messages');
+        channel.bind('new-message', function(message) {
+          this.messages.push(message);
+        }.bind(this));
+      }
+    };
+    
+    MyApp.init();
+  </script>
+  <script>
+    // Define your tests - probably in a separate file that injected in test mode
+    describe('Message Collection', function() {
+      it('should be updated with a new message when new-message is triggered', function() {
+        var channel = Pusher.singleton.channel('messages');
+        channel.emit('new-message', { text: 'test stub message'});
+        
+        expect(MyApp.messages.length).to.be(1);
+        expect(MyApp.messages[0].text).to.be('test stub message');
+      });
+    });
+  </script>
+</body>
+</html>
+```
+
 ## Installation
+
+```
+bower install pusher-test-stub#2.0.0
+```
 
 Include the `dist/pusher-test-stub.js` file after `pusher.js` script.
 
 ```html
 <script src="//js.pusher.com/2.2/pusher.min.js"></script>
-<script src="path/to/dist/pusher-test-stub.js"></script>
+<script src="bower_components/dist/pusher-test-stub.js"></script>
 ```
 
 The `Pusher` definition will then be overwritten by the `PusherTestStub`
@@ -118,7 +169,7 @@ want to create a single `Pusher` instance this can come in handy.
 Trigger an event on the given channel.
 
 ```js
-Pusher.singlton.trigger('channel', 'my-event', {});
+Pusher.singleton.trigger('channel', 'my-event', {});
 ```
 
 ## Development
