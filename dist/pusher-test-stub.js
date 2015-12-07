@@ -102,7 +102,7 @@ var PusherTestStub =
 	};
 
 	PusherTestStub.prototype.unsubscribe = function(channelName) {
-	  
+	  delete this._channels[channelName];
 	};
 
 	PusherTestStub.prototype.channel = function(channelName) {

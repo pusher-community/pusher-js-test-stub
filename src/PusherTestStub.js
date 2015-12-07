@@ -55,7 +55,7 @@ PusherTestStub.prototype._channelFactory = function(channelName, options) {
 };
 
 PusherTestStub.prototype.unsubscribe = function(channelName) {
-  
+  delete this._channels[channelName];
 };
 
 PusherTestStub.prototype.channel = function(channelName) {
