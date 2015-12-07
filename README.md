@@ -53,13 +53,13 @@ When in test mode inject the test stub and execute tests.
 ## Installation
 
 ```
-bower install pusher-test-stub#2.0.0
+bower install pusher-test-stub
 ```
 
 Include the `dist/pusher-test-stub.js` file after `pusher.js` script.
 
 ```html
-<script src="//js.pusher.com/2.2/pusher.min.js"></script>
+<script src="//js.pusher.com/3.0/pusher.min.js"></script>
 <script src="bower_components/dist/pusher-test-stub.js"></script>
 ```
 
