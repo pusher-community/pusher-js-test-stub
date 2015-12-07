@@ -38,6 +38,19 @@ describe('Pusher', function(){
         
         expect(subChannel).to.be(fetchedChannel);
     });
+    
+    it('should not return an unsubscribed channel', function() {
+      var pusher = new Pusher();
+      var subChannel = pusher.subscribe('channel');
+      var fetchedChannel = pusher.channel('channel');
+      
+      expect(subChannel).to.be(fetchedChannel);
+      
+      pusher.unsubscribe('channel');
+      
+      fetchedChannel = pusher.channel('channel');
+      expect(fetchedChannel).to.be(undefined);
+    });
   });
   
   describe('#allChannels()', function(){

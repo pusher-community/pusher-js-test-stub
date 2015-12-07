@@ -1,8 +1,6 @@
 # CHANGELOG
 
-## 2.0.0-alpha
-
-Work in Progress
+## 2.0.0
 
 * **REMOVED** `dispatch` no longer available. Please use `emit`
 * **REMOVED** `Pusher.emit` has been removed. Please use `Pusher.singleton.trigger`

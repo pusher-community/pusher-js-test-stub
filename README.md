@@ -3,15 +3,13 @@
 Stubs out the `Pusher` object with a fake object that can be manipulated for
 testing purposes.
 
-**This version is a work in progress. Please [report any problems](https://github.com/leggetter/pusher-test-stub/issues).**
-
 ## Quick Start
 
 Install Pusher and the test stub.
 
 ```
 $ bower install pusher
-$ bower install pusher-test-stub#2.0.0
+$ bower install pusher-test-stub
 ```
 
 When in test mode inject the test stub and execute tests.
