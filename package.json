@@ -1,6 +1,6 @@
 {
   "name": "pusher-test-stub",
-  "version": "0.0.2",
+  "version": "2.0.1",
   "description": "The Pusher Test Stub provide a way of testing your client-side integration with the Pusher JavaScript library and lets you trigger events to ensure that your application behaves in the way you expect it to.",
   "main": "index.js",
   "directories": {
