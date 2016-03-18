@@ -85,6 +85,9 @@ var PusherTestStub =
 	};
 
 	/** @private **/
+	PusherTestStub.ready = function() {};
+
+	/** @private **/
 	PusherTestStub.prototype._channelFactory = function(channelName, options) {
 	  var channel = null;
 
@@ -143,7 +146,7 @@ var PusherTestStub =
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	var PusherDefinition = window.Pusher;
 
