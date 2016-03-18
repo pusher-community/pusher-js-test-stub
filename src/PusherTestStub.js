@@ -38,6 +38,9 @@ PusherTestStub.prototype.subscribe = function(channelName, options) {
 };
 
 /** @private **/
+PusherTestStub.ready = function() {};
+
+/** @private **/
 PusherTestStub.prototype._channelFactory = function(channelName, options) {
   var channel = null;
 
