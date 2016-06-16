@@ -3,6 +3,8 @@
 Stubs out the `Pusher` object with a fake object that can be manipulated for
 testing purposes.
 
+__This does NOT work with PusherJS 3.1 yet. We're working on it.__
+
 ## Quick Start
 
 Install Pusher and the test stub.
